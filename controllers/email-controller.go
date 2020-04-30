@@ -9,8 +9,8 @@ import (
 )
 
 type EmailController interface {
-	Save(context *gin.Context) entity.Email
-	FindAll() []entity.Email
+	Save(context *gin.Context)
+	FindAll(context *gin.Context)
 	ShowAll(context *gin.Context)
 }
 
@@ -22,14 +22,16 @@ func CreateEmailController(service service.EmailService) EmailController {
 	return &emailController{service: service}
 }
 
-func (controller *emailController) Save(context *gin.Context) entity.Email {
+func (controller *emailController) Save(context *gin.Context) {
 	var email entity.Email
 	context.BindJSON(&email)
-	return controller.service.Save(email)
+	email = controller.service.Save(email)
+	context.JSON(200, email)
 }
 
-func (controller *emailController) FindAll() []entity.Email {
-	return controller.service.FindAll()
+func (controller *emailController) FindAll(context *gin.Context) {
+	emails := controller.service.FindAll()
+	context.JSON(200, emails)
 }
 
 func (controller *emailController) ShowAll(context *gin.Context) {

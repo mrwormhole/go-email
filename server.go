@@ -25,20 +25,15 @@ func main() {
 	server := gin.New()
 
 	server.Static("views/css", "./templates/css")
+	server.Static("views/js", "./templates/js")
 	server.LoadHTMLGlob("templates/*.html")
 
 	server.Use(gin.Recovery(), middleware.Fool(), middleware.BasicAuth(), gindump.Dump())
 
 	apiRoutes := server.Group("/api")
 	{
-		apiRoutes.GET(" /emails", func(context *gin.Context) {
-			context.JSON(200, emailController.FindAll())
-		})
-
-		apiRoutes.POST("/emails", func(context *gin.Context) {
-			context.JSON(200, emailController.Save(context))
-		})
-
+		apiRoutes.GET("/emails", emailController.FindAll)
+		apiRoutes.POST("/emails", emailController.Save)
 	}
 
 	viewRoutes := server.Group("/views")

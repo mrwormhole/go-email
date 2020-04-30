@@ -4,15 +4,17 @@
 
 [GIN-debug] GET    /views/css/*filepath      --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (1 handlers)
 [GIN-debug] HEAD   /views/css/*filepath      --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (1 handlers)
+[GIN-debug] GET    /views/js/*filepath       --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (1 handlers)
+[GIN-debug] HEAD   /views/js/*filepath       --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (1 handlers)
 [GIN-debug] Loaded HTML Templates (2): 
 	- 
 	- index.html
 
-[GIN-debug] GET    /api/ /emails             --> main.main.func1 (5 handlers)
-[GIN-debug] POST   /api/emails               --> main.main.func2 (5 handlers)
+[GIN-debug] GET    /api/emails               --> github.com/MrWormHole/go-email/controllers.EmailController.FindAll-fm (5 handlers)
+[GIN-debug] POST   /api/emails               --> github.com/MrWormHole/go-email/controllers.EmailController.Save-fm (5 handlers)
 [GIN-debug] GET    /views/emails             --> github.com/MrWormHole/go-email/controllers.EmailController.ShowAll-fm (5 handlers)
 [GIN-debug] Listening and serving HTTP on :8080
-Hey you fool! ::1 - [30 Apr 20 02:54 BST] POST /api/emails  200 9.9387ms 
-Hey you fool! ::1 - [30 Apr 20 02:54 BST] POST /api/emails  200 9.9406ms 
-Hey you fool! ::1 - [30 Apr 20 02:54 BST] GET /views/emails  200 11.9675ms 
-Hey you fool! ::1 - [30 Apr 20 02:55 BST] GET /views/emails  200 10.9704ms 
+Hey you fool! ::1 - [30 Apr 20 03:51 BST] GET /api/emails  200 7.9791ms 
+Hey you fool! ::1 - [30 Apr 20 03:51 BST] POST /api/emails  200 6.9801ms 
+Hey you fool! ::1 - [30 Apr 20 03:52 BST] POST /api/emails  200 10.9695ms 
+Hey you fool! ::1 - [30 Apr 20 03:52 BST] GET /views/emails  200 8.9744ms 
