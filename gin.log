@@ -2,7 +2,17 @@
  - using env:	export GIN_MODE=release
  - using code:	gin.SetMode(gin.ReleaseMode)
 
-[GIN-debug] GET    /emails                   --> main.main.func1 (5 handlers)
-[GIN-debug] POST   /emails                   --> main.main.func2 (5 handlers)
+[GIN-debug] GET    /views/css/*filepath      --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (1 handlers)
+[GIN-debug] HEAD   /views/css/*filepath      --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (1 handlers)
+[GIN-debug] Loaded HTML Templates (2): 
+	- 
+	- index.html
+
+[GIN-debug] GET    /api/ /emails             --> main.main.func1 (5 handlers)
+[GIN-debug] POST   /api/emails               --> main.main.func2 (5 handlers)
+[GIN-debug] GET    /views/emails             --> github.com/MrWormHole/go-email/controllers.EmailController.ShowAll-fm (5 handlers)
 [GIN-debug] Listening and serving HTTP on :8080
-Hey you fool! ::1 - [29 Apr 20 20:28 BST] GET /emails  200 18.9506ms 
+Hey you fool! ::1 - [30 Apr 20 02:54 BST] POST /api/emails  200 9.9387ms 
+Hey you fool! ::1 - [30 Apr 20 02:54 BST] POST /api/emails  200 9.9406ms 
+Hey you fool! ::1 - [30 Apr 20 02:54 BST] GET /views/emails  200 11.9675ms 
+Hey you fool! ::1 - [30 Apr 20 02:55 BST] GET /views/emails  200 10.9704ms 

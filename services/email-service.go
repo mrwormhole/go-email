@@ -1,6 +1,6 @@
 package service
 
-import "github.com/MrWormHole/go-email/entity"
+import entity "github.com/MrWormHole/go-email/entities"
 
 type EmailService interface {
 	Save(entity.Email) entity.Email

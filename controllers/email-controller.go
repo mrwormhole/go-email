@@ -1,14 +1,17 @@
 package controller
 
 import (
-	"github.com/MrWormHole/go-email/entity"
-	"github.com/MrWormHole/go-email/service"
+	"net/http"
+
+	entity "github.com/MrWormHole/go-email/entities"
+	service "github.com/MrWormHole/go-email/services"
 	"github.com/gin-gonic/gin"
 )
 
 type EmailController interface {
 	Save(context *gin.Context) entity.Email
 	FindAll() []entity.Email
+	ShowAll(context *gin.Context)
 }
 
 type emailController struct {
@@ -27,4 +30,13 @@ func (controller *emailController) Save(context *gin.Context) entity.Email {
 
 func (controller *emailController) FindAll() []entity.Email {
 	return controller.service.FindAll()
+}
+
+func (controller *emailController) ShowAll(context *gin.Context) {
+	emails := controller.service.FindAll()
+	data := gin.H{
+		"title":  "Email Page",
+		"emails": emails,
+	}
+	context.HTML(http.StatusOK, "index.html", data)
 }
