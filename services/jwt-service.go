@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -8,6 +9,7 @@ import (
 
 type JWTService interface {
 	Generate() (string, error)
+	Validate(tokenString string) (bool, error)
 }
 
 type jwtService struct {
@@ -18,7 +20,6 @@ func CreateJWTService(key string) JWTService {
 	return &jwtService{signingKey: key}
 }
 
-// TODO: Think about client side validation for generated token
 func (service *jwtService) Generate() (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
@@ -33,4 +34,24 @@ func (service *jwtService) Generate() (string, error) {
 	}
 
 	return tokenString, nil
+}
+
+func (service *jwtService) Validate(tokenString string) (bool, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("Unexpected signing method")
+		}
+
+		return service.signingKey, nil
+	})
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if ok && token.Valid {
+		if claims["authorized"] == true && claims["user"] == "Jack Hunter" {
+			return true, nil
+		} else {
+			return false, errors.New("Token is invalid")
+		}
+	}
+	return false, err
 }
