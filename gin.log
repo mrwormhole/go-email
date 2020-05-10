@@ -11,10 +11,9 @@
 	- index.html
 
 [GIN-debug] GET    /api/emails               --> github.com/MrWormHole/go-email/controllers.EmailController.FindAll-fm (5 handlers)
+[GIN-debug] GET    /api/emails/:id           --> github.com/MrWormHole/go-email/controllers.EmailController.Show-fm (5 handlers)
 [GIN-debug] POST   /api/emails               --> github.com/MrWormHole/go-email/controllers.EmailController.Save-fm (5 handlers)
+[GIN-debug] PUT    /api/emails/:id           --> github.com/MrWormHole/go-email/controllers.EmailController.Update-fm (5 handlers)
+[GIN-debug] DELETE /api/emails/:id           --> github.com/MrWormHole/go-email/controllers.EmailController.Delete-fm (5 handlers)
 [GIN-debug] GET    /views/emails             --> github.com/MrWormHole/go-email/controllers.EmailController.ShowAll-fm (5 handlers)
 [GIN-debug] Listening and serving HTTP on :8080
-Hey you fool! ::1 - [30 Apr 20 03:51 BST] GET /api/emails  200 7.9791ms 
-Hey you fool! ::1 - [30 Apr 20 03:51 BST] POST /api/emails  200 6.9801ms 
-Hey you fool! ::1 - [30 Apr 20 03:52 BST] POST /api/emails  200 10.9695ms 
-Hey you fool! ::1 - [30 Apr 20 03:52 BST] GET /views/emails  200 8.9744ms 

@@ -33,8 +33,11 @@ func main() {
 
 	apiRoutes := server.Group("/api")
 	{
+		// TODO: test db service after finishing up refactoring
+		// TODO: gracefully handle db closing
+		// TODO: duplicate ids in db? something to do with api changes
 		apiRoutes.GET("/emails", emailController.FindAll)
-		apiRoutes.GET("/emails/:id", emailController.FindAll) //show one
+		apiRoutes.GET("/emails/:id", emailController.Show)
 		apiRoutes.POST("/emails", emailController.Save)
 		apiRoutes.PUT("/emails/:id", emailController.Update)
 		apiRoutes.DELETE("/emails/:id", emailController.Delete)
