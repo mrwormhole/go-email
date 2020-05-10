@@ -1,5 +1,7 @@
 package entity
 
+// maybe change entity to model in future
+
 import (
 	"time"
 

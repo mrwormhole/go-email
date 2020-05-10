@@ -12,8 +12,9 @@ import (
 )
 
 var (
+	dbService       service.DBService          = service.CreateDBService()
 	emailService    service.EmailService       = service.CreateEmailService()
-	emailController controller.EmailController = controller.CreateEmailController(emailService)
+	emailController controller.EmailController = controller.CreateEmailController(emailService, dbService)
 )
 
 func init() {
@@ -33,7 +34,10 @@ func main() {
 	apiRoutes := server.Group("/api")
 	{
 		apiRoutes.GET("/emails", emailController.FindAll)
+		apiRoutes.GET("/emails/:id", emailController.FindAll) //show one
 		apiRoutes.POST("/emails", emailController.Save)
+		apiRoutes.PUT("/emails/:id", emailController.Update)
+		apiRoutes.DELETE("/emails/:id", emailController.Delete)
 	}
 
 	viewRoutes := server.Group("/views")
