@@ -27,15 +27,14 @@ func main() {
 
 	server.Static("views/css", "./templates/css")
 	server.Static("views/js", "./templates/js")
-	server.LoadHTMLGlob("templates/*.html")
+	server.LoadHTMLGlob("./templates/*.html")
 
 	server.Use(gin.Recovery(), middleware.Fool(), middleware.BasicAuth(), gindump.Dump())
 
 	apiRoutes := server.Group("/api")
 	{
-		// TODO: test db service after finishing up refactoring
-		// TODO: gracefully handle db closing
-		// TODO: duplicate ids in db? something to do with api changes
+		// TODO: test db service after finishing up refactoring(renaming things)
+		// TODO: gracefully handle db closing?
 		apiRoutes.GET("/emails", emailController.FindAll)
 		apiRoutes.GET("/emails/:id", emailController.Show)
 		apiRoutes.POST("/emails", emailController.Save)

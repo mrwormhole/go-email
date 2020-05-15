@@ -45,7 +45,7 @@ func (controller *emailController) Update(context *gin.Context) {
 
 	var email entity.Email
 	context.BindJSON(&email)
-	email.ID = (uint64)(id)
+	email.ID = (uint)(id)
 
 	controller.dbService.Update(email)
 }
@@ -71,7 +71,7 @@ func (controller *emailController) Show(context *gin.Context) {
 
 	var email entity.Email
 	context.BindJSON(&email)
-	email.ID = (uint64)(id)
+	email.ID = (uint)(id)
 
 	email = controller.dbService.Retrieve(email.ID)
 	context.JSON(200, email)
@@ -83,7 +83,7 @@ func (controller *emailController) Delete(context *gin.Context) {
 
 	var email entity.Email
 	context.BindJSON(&email)
-	email.ID = (uint64)(id)
+	email.ID = (uint)(id)
 
 	controller.dbService.Delete(email)
 }

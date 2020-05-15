@@ -10,7 +10,7 @@ import (
 
 type DBService interface {
 	Create(entity.Email)
-	Retrieve(primaryKey uint64) entity.Email
+	Retrieve(primaryKey uint) entity.Email
 	Update(entity.Email)
 	Delete(entity.Email)
 	FindAll() []entity.Email
@@ -35,7 +35,7 @@ func (service *dbService) Create(email entity.Email) {
 	service.connection.Create(&email)
 }
 
-func (service *dbService) Retrieve(primaryKey uint64) entity.Email {
+func (service *dbService) Retrieve(primaryKey uint) entity.Email {
 	email := entity.Email{}
 	service.connection.First(&email, primaryKey)
 	return email
