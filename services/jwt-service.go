@@ -16,6 +16,7 @@ type jwtService struct {
 	signingKey string //could be env variable in feature
 }
 
+// Creates a JWT service which can generate a token and validate a token based on its key
 func CreateJWTService(key string) JWTService {
 	return &jwtService{signingKey: key}
 }

@@ -24,7 +24,7 @@ type emailService struct {
 	emailRepository repository.EmailRepository
 }
 
-// Creates email services which sends emails with sendgrid
+// Creates a email service which sends emails with sendgrid
 func CreateEmailService(repository repository.EmailRepository) EmailService {
 	return &emailService{emailRepository: repository}
 }

@@ -33,9 +33,9 @@ func main() {
 	//server.LoadHTMLGlob("./templates/*.html")
 	server.LoadHTMLFiles("./templates/index.html")
 
-	server.Use(gin.Recovery(), middleware.BasicAuth(), gindump.Dump())
+	server.Use(gin.Recovery(), gindump.Dump())
 
-	apiRoutes := server.Group("/api")
+	apiRoutes := server.Group("/api").Use(middleware.JWTAuth())
 	{
 		apiRoutes.GET("sendEmail", emailController.Send)
 		apiRoutes.GET("/emails/:id", emailController.Find)
@@ -43,9 +43,9 @@ func main() {
 		apiRoutes.DELETE("/emails/:id", emailController.Remove)
 	}
 
-	viewRoutes := server.Group("/views")
+	viewRoutes := server.Group("/views").Use(middleware.BasicAuth())
 	{
-		viewRoutes.GET("/emails", emailController.ShowAll)
+		viewRoutes.GET("/emails", middleware.BasicAuth(), emailController.ShowAll)
 	}
 
 	err = server.Run(":8080")
