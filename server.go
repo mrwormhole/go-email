@@ -1,20 +1,15 @@
 package main
 
 import (
+	repository "github.com/MrWormHole/go-email/repositories/sqlite"
 	"io"
 	"os"
 
-	controller "github.com/MrWormHole/go-email/controllers"
-	middleware "github.com/MrWormHole/go-email/middlewares"
-	service "github.com/MrWormHole/go-email/services"
+	"github.com/MrWormHole/go-email/controllers"
+	"github.com/MrWormHole/go-email/middlewares"
+	"github.com/MrWormHole/go-email/services"
 	"github.com/gin-gonic/gin"
 	gindump "github.com/tpkeeper/gin-dump"
-)
-
-var (
-	dbService       service.DBService          = service.CreateDBService()
-	emailService    service.EmailService       = service.CreateEmailService()
-	emailController controller.EmailController = controller.CreateEmailController(emailService, dbService)
 )
 
 func init() {
@@ -23,23 +18,29 @@ func init() {
 }
 
 func main() {
+	emailRepository, err := repository.NewSqliteRepository()
+	emailService := service.CreateEmailService(emailRepository)
+	emailController := controller.CreateEmailController(emailService)
+
+	if err != nil {
+		panic(err)
+	}
+
 	server := gin.New()
 
 	server.Static("views/css", "./templates/css")
 	server.Static("views/js", "./templates/js")
-	server.LoadHTMLGlob("./templates/*.html")
+	//server.LoadHTMLGlob("./templates/*.html")
+	server.LoadHTMLFiles("./templates/index.html")
 
-	server.Use(gin.Recovery(), middleware.Fool(), middleware.BasicAuth(), gindump.Dump())
+	server.Use(gin.Recovery(), middleware.BasicAuth(), gindump.Dump())
 
 	apiRoutes := server.Group("/api")
 	{
-		// TODO: test db service after finishing up refactoring(renaming things)
-		// TODO: gracefully handle db closing?
+		apiRoutes.GET("sendEmail", emailController.Send)
+		apiRoutes.GET("/emails/:id", emailController.Find)
 		apiRoutes.GET("/emails", emailController.FindAll)
-		apiRoutes.GET("/emails/:id", emailController.Show)
-		apiRoutes.POST("/emails", emailController.Save)
-		apiRoutes.PUT("/emails/:id", emailController.Update)
-		apiRoutes.DELETE("/emails/:id", emailController.Delete)
+		apiRoutes.DELETE("/emails/:id", emailController.Remove)
 	}
 
 	viewRoutes := server.Group("/views")
@@ -47,5 +48,8 @@ func main() {
 		viewRoutes.GET("/emails", emailController.ShowAll)
 	}
 
-	server.Run(":8080")
+	err = server.Run(":8080")
+	if err != nil {
+		panic(err)
+	}
 }

@@ -1,6 +1,4 @@
-package entity
-
-// maybe change entity to model in future
+package model
 
 import (
 	"github.com/jinzhu/gorm"
@@ -17,3 +15,13 @@ type Email struct {
 	Message  string `json:"message"`
 	gorm.Model
 }
+
+// this doesn't get saved to db. This is for the JSON api.
+type EmailTemplate struct {
+	From string
+	To string
+	Subject string
+	PlainText string
+	HTMLContent string
+}
+

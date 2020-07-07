@@ -1,89 +1,111 @@
 package controller
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
-	entity "github.com/MrWormHole/go-email/entities"
+	model "github.com/MrWormHole/go-email/models"
 	service "github.com/MrWormHole/go-email/services"
 	"github.com/gin-gonic/gin"
 )
 
 // EmailController is for performing routes' actions
 type EmailController interface {
-	Save(context *gin.Context)
-	Update(context *gin.Context)
+	Send(context *gin.Context)
+	Find(context *gin.Context)
 	FindAll(context *gin.Context)
+	Remove(context *gin.Context)
 	ShowAll(context *gin.Context)
-	Show(context *gin.Context)
-	Delete(context *gin.Context)
 }
 
 type emailController struct {
 	emailService service.EmailService
-	dbService    service.DBService
 }
 
 // CreateEmailController creates an email controller
-func CreateEmailController(emailService service.EmailService, dbService service.DBService) EmailController {
-	return &emailController{emailService: emailService, dbService: dbService}
+func CreateEmailController(emailService service.EmailService) EmailController {
+	return &emailController{emailService: emailService}
 }
 
-func (controller *emailController) Save(context *gin.Context) {
-	var email entity.Email
-	context.BindJSON(&email)
+// This has been used by api
+func (c *emailController) Send(context *gin.Context) {
+	emailTemplate := model.EmailTemplate{}
+	err := context.BindJSON(&emailTemplate)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError,gin.H{ "status:" : "Failed to bind JSON to the email template model"})
+		return
+	}
 
-	//email = controller.emailService.Save(email)
-	controller.dbService.Create(email)
+	_, err = c.emailService.Send(emailTemplate)
+	// i feel like we should log the status of this
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{ "status:" : "Failed to send email"})
+		return
+	}
 
-	context.JSON(200, email)
+	email := model.Email{}
+	email.Sender.Name = emailTemplate.From
+	email.Receiver.Name = emailTemplate.To
+	email.Message = emailTemplate.PlainText
+	// we might need to save html later on
+	c.emailService.Save(email)
+	context.JSON(http.StatusOK, emailTemplate)
 }
 
-func (controller *emailController) Update(context *gin.Context) {
+// This has been used by api
+func (c *emailController) Find(context *gin.Context) {
 	idString := context.Param("id")
-	id, _ := strconv.Atoi(idString)
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{ "status:" : "Failed to parse the id from URL"})
+		return
+	}
 
-	var email entity.Email
-	context.BindJSON(&email)
+	email := model.Email{}
+	err = context.BindJSON(&email)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{ "status:" : "Failed to bind JSON to the email model"})
+	}
+
+	email.ID = uint(id)
+	email = c.emailService.Find(email.ID)
+	context.JSON(http.StatusOK, email)
+}
+
+// This has been used by api
+func (c *emailController) FindAll(context *gin.Context) {
+	emails := c.emailService.FindAll()
+	context.JSON(http.StatusOK, emails)
+}
+
+// This has been used by api
+func (c *emailController) Remove(context *gin.Context) {
+	idString := context.Param("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{ "status:" : "Failed to parse the id from URL"})
+		return
+	}
+
+	email := model.Email{}
+	err = context.BindJSON(&email)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError,gin.H{ "status:" : "Failed to bind JSON to the email model"})
+		return
+	}
+
 	email.ID = (uint)(id)
-
-	controller.dbService.Update(email)
+	c.emailService.Remove(email)
+	context.JSON(http.StatusOK, email)
 }
 
-func (controller *emailController) FindAll(context *gin.Context) {
-	emails := controller.dbService.FindAll()
-	context.JSON(200, emails)
-}
-
-func (controller *emailController) ShowAll(context *gin.Context) {
-	// stil using email service here for testing templates
-	emails := controller.emailService.FindAll()
-	data := gin.H{
+// This has been used by index view
+func (c *emailController) ShowAll(context *gin.Context) {
+	emails := c.emailService.FindAll()
+	data := gin.H {
 		"title":  "Email Page",
 		"emails": emails,
 	}
 	context.HTML(http.StatusOK, "index.html", data)
-}
-
-func (controller *emailController) Show(context *gin.Context) {
-	idString := context.Param("id")
-	id, _ := strconv.Atoi(idString)
-
-	var email entity.Email
-	context.BindJSON(&email)
-	email.ID = (uint)(id)
-
-	email = controller.dbService.Retrieve(email.ID)
-	context.JSON(200, email)
-}
-
-func (controller *emailController) Delete(context *gin.Context) {
-	idString := context.Param("id")
-	id, _ := strconv.Atoi(idString)
-
-	var email entity.Email
-	context.BindJSON(&email)
-	email.ID = (uint)(id)
-
-	controller.dbService.Delete(email)
 }

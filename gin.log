@@ -6,14 +6,10 @@
 [GIN-debug] HEAD   /views/css/*filepath      --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (1 handlers)
 [GIN-debug] GET    /views/js/*filepath       --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (1 handlers)
 [GIN-debug] HEAD   /views/js/*filepath       --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (1 handlers)
-[GIN-debug] Loaded HTML Templates (2): 
-	- 
-	- index.html
-
-[GIN-debug] GET    /api/emails               --> github.com/MrWormHole/go-email/controllers.EmailController.FindAll-fm (5 handlers)
-[GIN-debug] GET    /api/emails/:id           --> github.com/MrWormHole/go-email/controllers.EmailController.Show-fm (5 handlers)
-[GIN-debug] POST   /api/emails               --> github.com/MrWormHole/go-email/controllers.EmailController.Save-fm (5 handlers)
-[GIN-debug] PUT    /api/emails/:id           --> github.com/MrWormHole/go-email/controllers.EmailController.Update-fm (5 handlers)
-[GIN-debug] DELETE /api/emails/:id           --> github.com/MrWormHole/go-email/controllers.EmailController.Delete-fm (5 handlers)
-[GIN-debug] GET    /views/emails             --> github.com/MrWormHole/go-email/controllers.EmailController.ShowAll-fm (5 handlers)
+[GIN-debug] GET    /api/emails               --> github.com/MrWormHole/go-email/controllers.EmailController.FindAll-fm (4 handlers)
+[GIN-debug] GET    /api/emails/:id           --> github.com/MrWormHole/go-email/controllers.EmailController.Show-fm (4 handlers)
+[GIN-debug] POST   /api/emails               --> github.com/MrWormHole/go-email/controllers.EmailController.Save-fm (4 handlers)
+[GIN-debug] PUT    /api/emails/:id           --> github.com/MrWormHole/go-email/controllers.EmailController.Update-fm (4 handlers)
+[GIN-debug] DELETE /api/emails/:id           --> github.com/MrWormHole/go-email/controllers.EmailController.Delete-fm (4 handlers)
+[GIN-debug] GET    /views/emails             --> github.com/MrWormHole/go-email/controllers.EmailController.ShowAll-fm (4 handlers)
 [GIN-debug] Listening and serving HTTP on :8080
