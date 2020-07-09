@@ -1,13 +1,14 @@
 package main
 
 import (
-	repository "github.com/MrWormHole/go-email/repositories/sqlite"
 	"io"
 	"os"
 
-	"github.com/MrWormHole/go-email/controllers"
-	"github.com/MrWormHole/go-email/middlewares"
-	"github.com/MrWormHole/go-email/services"
+	repository "github.com/MrWormHole/go-email/repositories/sqlite"
+
+	controller "github.com/MrWormHole/go-email/controllers"
+	middleware "github.com/MrWormHole/go-email/middlewares"
+	service "github.com/MrWormHole/go-email/services"
 	"github.com/gin-gonic/gin"
 	gindump "github.com/tpkeeper/gin-dump"
 )
@@ -45,7 +46,7 @@ func main() {
 
 	viewRoutes := server.Group("/views").Use(middleware.BasicAuth())
 	{
-		viewRoutes.GET("/emails", middleware.BasicAuth(), emailController.ShowAll)
+		viewRoutes.GET("/emails", emailController.ShowAll)
 	}
 
 	err = server.Run(":8080")
