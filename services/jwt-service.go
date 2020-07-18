@@ -13,7 +13,7 @@ type JWTService interface {
 }
 
 type jwtService struct {
-	signingKey string //could be env variable in feature
+	signingKey string
 }
 
 // Creates a JWT service which can generate a token and validate a token based on its key
@@ -27,9 +27,9 @@ func (service *jwtService) Generate() (string, error) {
 
 	claims["authorized"] = true
 	claims["user"] = "Jack Hunter"
-	claims["exp"] = time.Now().Add(time.Minute * 15).Unix()
+	claims["exp"] = time.Now().Add(time.Hour).Unix()
 
-	tokenString, err := token.SignedString(service.signingKey)
+	tokenString, err := token.SignedString([]byte(service.signingKey))
 	if err != nil {
 		return "", err
 	}
@@ -43,7 +43,7 @@ func (service *jwtService) Validate(tokenString string) (bool, error) {
 			return nil, errors.New("Unexpected signing method")
 		}
 
-		return service.signingKey, nil
+		return []byte(service.signingKey), nil
 	})
 
 	claims, ok := token.Claims.(jwt.MapClaims)

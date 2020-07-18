@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -33,14 +33,14 @@ func (c *emailController) Send(context *gin.Context) {
 	emailTemplate := model.EmailTemplate{}
 	err := context.BindJSON(&emailTemplate)
 	if err != nil {
-		context.JSON(http.StatusInternalServerError,gin.H{ "status:" : "Failed to bind JSON to the email template model"})
+		context.JSON(http.StatusInternalServerError, gin.H{"status:": "Failed to bind JSON to the email template model"})
 		return
 	}
 
 	_, err = c.emailService.Send(emailTemplate)
 	// i feel like we should log the status of this
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{ "status:" : "Failed to send email"})
+		context.JSON(http.StatusInternalServerError, gin.H{"status:": "Failed to send email"})
 		return
 	}
 
@@ -49,6 +49,7 @@ func (c *emailController) Send(context *gin.Context) {
 	email.Receiver.Name = emailTemplate.To
 	email.Message = emailTemplate.PlainText
 	// we might need to save html later on
+	fmt.Println("THIS IS A DEBUG MESSAGE: " + email.ToString())
 	c.emailService.Save(email)
 	context.JSON(http.StatusOK, emailTemplate)
 }
@@ -58,14 +59,14 @@ func (c *emailController) Find(context *gin.Context) {
 	idString := context.Param("id")
 	id, err := strconv.Atoi(idString)
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{ "status:" : "Failed to parse the id from URL"})
+		context.JSON(http.StatusInternalServerError, gin.H{"status:": "Failed to parse the id from URL"})
 		return
 	}
 
 	email := model.Email{}
 	err = context.BindJSON(&email)
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{ "status:" : "Failed to bind JSON to the email model"})
+		context.JSON(http.StatusInternalServerError, gin.H{"status:": "Failed to bind JSON to the email model"})
 	}
 
 	email.ID = uint(id)
@@ -84,14 +85,14 @@ func (c *emailController) Remove(context *gin.Context) {
 	idString := context.Param("id")
 	id, err := strconv.Atoi(idString)
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{ "status:" : "Failed to parse the id from URL"})
+		context.JSON(http.StatusInternalServerError, gin.H{"status:": "Failed to parse the id from URL"})
 		return
 	}
 
 	email := model.Email{}
 	err = context.BindJSON(&email)
 	if err != nil {
-		context.JSON(http.StatusInternalServerError,gin.H{ "status:" : "Failed to bind JSON to the email model"})
+		context.JSON(http.StatusInternalServerError, gin.H{"status:": "Failed to bind JSON to the email model"})
 		return
 	}
 
@@ -103,7 +104,8 @@ func (c *emailController) Remove(context *gin.Context) {
 // This has been used by index view
 func (c *emailController) ShowAll(context *gin.Context) {
 	emails := c.emailService.FindAll()
-	data := gin.H {
+	fmt.Print(emails)
+	data := gin.H{
 		"title":  "Email Page",
 		"emails": emails,
 	}

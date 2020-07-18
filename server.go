@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"os"
 
@@ -14,6 +15,11 @@ import (
 )
 
 func init() {
+	testService := service.CreateJWTService(os.Getenv("SALT_KEY"))
+	test, _ := testService.Generate()
+	fmt.Println(testService.Validate(test))
+	fmt.Printf("Here is the token string that you need: %s",test)
+
 	file, _ := os.Create("gin.log")
 	gin.DefaultWriter = io.MultiWriter(file, os.Stdout)
 }
@@ -38,7 +44,7 @@ func main() {
 
 	apiRoutes := server.Group("/api").Use(middleware.JWTAuth())
 	{
-		apiRoutes.GET("sendEmail", emailController.Send)
+		apiRoutes.POST("/sendEmail", emailController.Send)
 		apiRoutes.GET("/emails/:id", emailController.Find)
 		apiRoutes.GET("/emails", emailController.FindAll)
 		apiRoutes.DELETE("/emails/:id", emailController.Remove)

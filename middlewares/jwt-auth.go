@@ -1,17 +1,18 @@
 package middleware
 
 import (
-	service "github.com/MrWormHole/go-email/services"
+	"github.com/MrWormHole/go-email/services"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"os"
+	"strings"
 )
-
-const SALT_KEY = "HOCUSPOCUS"
 
 func JWTAuth() gin.HandlerFunc {
 	return func(context *gin.Context) {
-		jwtService := service.CreateJWTService(SALT_KEY)
-		tokenString := context.GetHeader("Authorization")
+		jwtService := service.CreateJWTService(os.Getenv("SALT_KEY"))
+		tokenString := strings.Split(context.GetHeader("Authorization"), " ")[1]
+
 		if len(tokenString) < 1 {
 			context.AbortWithStatus(http.StatusUnauthorized)
 			return

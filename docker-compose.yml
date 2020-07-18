@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  go-web-app:
+    restart: always
+    ports:
+      - 8080:8080
+    build:
+      dockerfile: Dockerfile
+      context: .
+    environment:
+      PORT: 8080
+      SALT_KEY: HOCUSPOCUSMAGICTRICK
+      SENDGRID_API_KEY: SG.XxXxX
+
+

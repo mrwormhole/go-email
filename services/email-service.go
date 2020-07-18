@@ -2,15 +2,14 @@ package service
 
 import (
 	"fmt"
-	model "github.com/MrWormHole/go-email/models"
-	repository "github.com/MrWormHole/go-email/repositories/sqlite"
+	"github.com/MrWormHole/go-email/models"
+	"github.com/MrWormHole/go-email/repositories/sqlite"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"net/http"
+	"os"
 	"strings"
 )
-
-const API_KEY = "XxXxX"
 
 type EmailService interface {
 	Send(email model.EmailTemplate) (string, error)
@@ -39,7 +38,7 @@ func (s *emailService) Send(emailTemplate model.EmailTemplate) (string, error) {
 	htmlContent := emailTemplate.HTMLContent
 
 	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
-	client := sendgrid.NewSendClient(API_KEY)
+	client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
 	response, err := client.Send(message)
 	if err != nil {
 		return "Failed to send email via sendgrid client", err
@@ -48,6 +47,8 @@ func (s *emailService) Send(emailTemplate model.EmailTemplate) (string, error) {
 }
 
 func (s *emailService) Save(email model.Email) {
+
+	fmt.Println("(EMAIL SERVICE)THIS IS A DEBUG MESSAGE: " + email.ToString())
 	s.emailRepository.Create(email)
 }
 

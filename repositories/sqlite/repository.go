@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 	model "github.com/MrWormHole/go-email/models"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -32,6 +33,7 @@ func NewSqliteRepository() (EmailRepository, error) {
 }
 
 func (r *sqliteRepository) Create(email model.Email) {
+	fmt.Println("(EMAIL REPO)THIS IS A DEBUG MESSAGE: " + email.ToString())
 	r.database.Create(&email)
 }
 
