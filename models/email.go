@@ -6,15 +6,17 @@ import (
 )
 
 type Person struct {
-	Name string `json:"name"`
 	gorm.Model
+	Name string `json:"name"`
 }
 
 type Email struct {
-	Sender   Person `json:"sender" gorm:"foreignkey:Name;not null"`
-	Receiver Person `json:"receiver" gorm:"foreignkey:Name;not null"`
-	Message  string `json:"message"`
 	gorm.Model
+	Sender   Person `json:"sender" gorm:"foreignkey:SenderID;not null"`
+	SenderID uint
+	Receiver Person `json:"receiver" gorm:"foreignkey:ReceiverID;not null"`
+	ReceiverID uint
+	Message  string `json:"message"`
 }
 
 func(email Email) ToString() string {

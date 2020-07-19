@@ -27,7 +27,8 @@ func init() {
 func main() {
 	emailRepository, err := repository.NewSqliteRepository()
 	emailService := service.CreateEmailService(emailRepository)
-	emailController := controller.CreateEmailController(emailService)
+	peopleService := service.CreatePeopleService(emailRepository)
+	emailController := controller.CreateEmailController(emailService, peopleService)
 
 	if err != nil {
 		panic(err)

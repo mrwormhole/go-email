@@ -21,11 +21,12 @@ type EmailController interface {
 
 type emailController struct {
 	emailService service.EmailService
+	peopleService service.PeopleService
 }
 
 // CreateEmailController creates an email controller
-func CreateEmailController(emailService service.EmailService) EmailController {
-	return &emailController{emailService: emailService}
+func CreateEmailController(emailService service.EmailService, peopleService service.PeopleService) EmailController {
+	return &emailController{emailService: emailService, peopleService: peopleService}
 }
 
 // This has been used by api
@@ -104,7 +105,12 @@ func (c *emailController) Remove(context *gin.Context) {
 // This has been used by index view
 func (c *emailController) ShowAll(context *gin.Context) {
 	emails := c.emailService.FindAll()
+	for i := 0; i < len(emails); i++ {
+		emails[i].Receiver = c.peopleService.Find(emails[i].ReceiverID)
+		emails[i].Sender =	c.peopleService.Find(emails[i].SenderID)
+	}
 	fmt.Print(emails)
+
 	data := gin.H{
 		"title":  "Email Page",
 		"emails": emails,

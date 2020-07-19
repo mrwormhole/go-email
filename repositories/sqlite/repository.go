@@ -15,6 +15,10 @@ type EmailRepository interface {
 	Delete(model.Email)
 	FindAll() []model.Email
 	Close() error
+	// didn't like this being here anyway
+	GetPerson(primaryKey uint) model.Person
+	GetPeople() []model.Person
+	DeletePerson(model.Person)
 }
 
 type sqliteRepository struct {
@@ -39,7 +43,7 @@ func (r *sqliteRepository) Create(email model.Email) {
 
 func (r *sqliteRepository) Retrieve(id uint) model.Email {
 	email := model.Email{}
-	r.database.First(email, id)
+	r.database.First(&email, id)
 	return email
 }
 
@@ -63,6 +67,22 @@ func (r *sqliteRepository) Close() error {
 		return errors.New("Failed to close database!")
 	}
 	return nil
+}
+
+func (r *sqliteRepository) GetPerson(id uint) model.Person {
+	person := model.Person{}
+	r.database.First(&person, id)
+	return person
+}
+
+func (r *sqliteRepository) GetPeople() []model.Person  {
+	people := []model.Person{}
+	r.database.Find(&people)
+	return people
+}
+
+func (r *sqliteRepository) DeletePerson(person model.Person) {
+	r.database.Delete(&person)
 }
 
 
