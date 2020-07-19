@@ -7,7 +7,7 @@ $ git clone github.com/MrWormHole/go-email.git
 $ docker-compose up -d
 ```
 
-##### POST /api/sendEmail [jwtAuth required, use the token(lasts 1 hour) when printed on console while application started]
+##### POST /api/sendEmail [jwtAuth required, use the token(lasts 1 hour) when printed on console after application started]
 ##### request:
 ```
 {
@@ -30,15 +30,15 @@ $ docker-compose up -d
 
 ```
 
-##### GET /api/emails/:id [jwtAuth required, use the token(lasts 1 hour) when printed on console while application started]
+##### GET /api/emails/:id [jwtAuth required, use the token(lasts 1 hour) when printed on console after application started]
 ```
   This will get a email from email records.
 ```
-##### GET /api/emails [jwtAuth required, use the token(lasts 1 hour) when printed on console while application started]
+##### GET /api/emails [jwtAuth required, use the token(lasts 1 hour) when printed on console after application started]
 ```
   This will get all emails from email records.
 ```
-##### DELETE /api/emails/:id [jwtAuth required, use the token(lasts 1 hour) when printed on console while application started]
+##### DELETE /api/emails/:id [jwtAuth required, use the token(lasts 1 hour) when printed on console after application started]
 ```
   This will delete the email from email records.
 ```

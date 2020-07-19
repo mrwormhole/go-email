@@ -56,7 +56,8 @@ func main() {
 		viewRoutes.GET("/emails", emailController.ShowAll)
 	}
 
-	err = server.Run(":8080")
+	portAddress := fmt.Sprintf(":%s", os.Getenv("PORT"))
+	err = server.Run(portAddress)
 	if err != nil {
 		panic(err)
 	}

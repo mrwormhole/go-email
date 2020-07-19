@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// Auth middleware that has been used by api routes
 func JWTAuth() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		jwtService := service.CreateJWTService(os.Getenv("SALT_KEY"))

@@ -12,5 +12,7 @@ services:
       PORT: 8080
       SALT_KEY: HOCUSPOCUSMAGICTRICK
       SENDGRID_API_KEY: SG.XxXxX
+      VIEW_USERNAME: jack
+      VIEW_PASSWORD: 1234
 
 
