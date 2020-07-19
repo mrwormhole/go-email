@@ -72,12 +72,18 @@ func (c *emailController) Find(context *gin.Context) {
 
 	email.ID = uint(id)
 	email = c.emailService.Find(email.ID)
+	email.Receiver = c.peopleService.Find(email.ReceiverID)
+	email.Sender =	c.peopleService.Find(email.SenderID)
 	context.JSON(http.StatusOK, email)
 }
 
 // This has been used by api
 func (c *emailController) FindAll(context *gin.Context) {
 	emails := c.emailService.FindAll()
+	for i := 0; i < len(emails); i++ {
+		emails[i].Receiver = c.peopleService.Find(emails[i].ReceiverID)
+		emails[i].Sender =	c.peopleService.Find(emails[i].SenderID)
+	}
 	context.JSON(http.StatusOK, emails)
 }
 
@@ -99,6 +105,10 @@ func (c *emailController) Remove(context *gin.Context) {
 
 	email.ID = (uint)(id)
 	c.emailService.Remove(email)
+	receiverPerson := c.peopleService.Find(email.ReceiverID)
+	senderPerson :=	c.peopleService.Find(email.SenderID)
+	c.peopleService.Remove(receiverPerson)
+	c.peopleService.Remove(senderPerson)
 	context.JSON(http.StatusOK, email)
 }
 
